@@ -1,0 +1,26 @@
+#!/bin/sh
+
+mkdir build_x32
+cd build_x32
+./../configure --enable-static=yes  --disable-gprof --target=i686-w64-mingw32 --host=i686-w64-mingw32
+
+echo "Press enter to continue"
+read _
+
+export pathstuff="../gdb/gdbsupport/pathstuff.c"
+
+mv -vn $pathstuff $pathstuff".old"
+
+sed 's/\"HOME\"/\"USERPROFILE\"/g' $pathstuff".old" > $pathstuff
+
+make LDFLAGS=-static
+
+rm -vf $pathstuff
+mv -vn $pathstuff".old" $pathstuff
+
+strip ./gdb/gdb.exe
+strip ./gdb/gdbserver/gdbreplay.exe
+strip ./gdb/gdbserver/gdbserver.exe
+
+
+

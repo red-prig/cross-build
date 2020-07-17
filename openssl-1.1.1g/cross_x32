@@ -1,0 +1,20 @@
+#!/bin/sh
+
+export ZLIB_LIBS="/home/zlib-1.2.11"
+
+export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
+export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
+
+export PATH="$LD_LIBRARY_PATH:$PATH"
+
+#--with-zlib-lib="$ZLIB_LIBS"
+
+./Configure enable-weak-ssl-ciphers shared enable-zlib --with-zlib-include="$ZLIB_LIBS" "-L$ZLIB_LIBS" "-L$LD_LIBRARY_PATH" --prefix="$(pwd)" --cross-compile-prefix=i686-w64-mingw32- mingw
+
+
+echo "Press enter to continue"
+read _
+
+make
+
+strip *.dll

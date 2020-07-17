@@ -1,0 +1,27 @@
+#!/bin/sh
+
+export ZLIB_LIBS="/home/zlib-1.2.11"
+export ZLIB_CFLAGS="-L$ZLIB_LIBS -I$ZLIB_LIBS"
+
+export OPENSSL_LIBS="/home/openssl-1.1.1d"
+export OPENSSL_LIBS_I="$OPENSSL_LIBS/include/openssl"
+export OPENSSL_CFLAGS="-L$OPENSSL_LIBS -I$OPENSSL_LIBS_I -I$OPENSSL_LIBS/include"
+
+#export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
+#export LD_PATH_GCC="/usr/lib/gcc/i686-w64-mingw32/6.3-win32"
+#-static-libgcc -static-libstdc++"  -fno-exceptions
+#II="-I/usr/lib/gcc/i686-w64-mingw32/6.3-win32/include/c++ -I/usr/lib/gcc/i686-w64-mingw32/6.3-win32/include/c++/parallel -I/usr/lib/gcc/i686-w64-mingw32/6.3-win32/include/c++/i686-w64-mingw32"
+#II="-I/usr/i686-w64-mingw32/include -L/usr/i686-w64-mingw32/lib"
+#export LDFLAGS="-l/usr/lib/i386-linux-gnu/gcrt1.o -static-libgcc -static-libstdc++"
+export CFLAGS="$CFLAGS $ZLIB_CFLAGS $OPENSSL_CFLAGS"
+export CPPFLAGS="$CFLAGS"
+
+export PATH="$ZLIB_LIBS:$OPENSSL_LIBS_I:$PATH"
+
+./configure --prefix="$(pwd)" --host=i686-w64-mingw32 --disable-debug-mode --enable-function-sections
+#echo "Press enter to continue"
+#read _
+
+make clean
+make
+

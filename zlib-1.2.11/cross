@@ -1,0 +1,19 @@
+#!/bin/sh
+PREFIX=i686-w64-mingw32
+export CC=$PREFIX-gcc
+export CXX=$PREFIX-g++
+export CPP=$PREFIX-cpp
+export RANLIB=$PREFIX-ranlib
+##
+export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
+export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
+export PATH="/usr/$PREFIX/bin:$LD_LIBRARY_PATH:$PATH"
+##exec "$@"
+
+./configure --static ##--shared 
+
+echo  "Press enter to continue"
+read _
+
+make
+

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+export OPENSSL_LIBS="/home/openssl-1.1.1d"
+export OPENSSL_CFLAGS="-L$OPENSSL_LIBS -I$OPENSSL_LIBS/include/openssl"
+
+libev_PREFIX=""
+
+export CFLAGS="-U__STRICT_ANSI__ -I$libev_PREFIX/include -L$libev_PREFIX/lib"
+export CXXFLAGS="$CFLAGS"
+
+export ZLIB_LIBS="/home/zlib-1.2.11_x64"
+export ZLIB_CFLAGS="-L$ZLIB_LIBS -I$ZLIB_LIBS"
+
+export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
+export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
+
+export PATH="$LD_LIBRARY_PATH:$ZLIB_LIBS:$OPENSSL_LIBS:$PATH"
+
+./configure --prefix=$(pwd) --host=x86_64-w64-mingw32
+
+echo "Press enter to continue"
+read _
+
+make
+
