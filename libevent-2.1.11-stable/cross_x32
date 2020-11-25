@@ -1,9 +1,9 @@
 #!/bin/sh
 
-export ZLIB_LIBS="/../zlib-1.2.11"
+export ZLIB_LIBS="$(pwd)/../zlib-1.2.11"
 export ZLIB_CFLAGS="-L$ZLIB_LIBS -I$ZLIB_LIBS"
 
-export OPENSSL_LIBS="/../openssl-1.1.1d"
+export OPENSSL_LIBS="$(pwd)/../openssl-1.1.1d"
 export OPENSSL_LIBS_I="$OPENSSL_LIBS/include/openssl"
 export OPENSSL_CFLAGS="-L$OPENSSL_LIBS -I$OPENSSL_LIBS_I -I$OPENSSL_LIBS/include"
 

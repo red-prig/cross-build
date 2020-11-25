@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export ZLIB_LIBS="/../zlib-1.2.11_x64"
+export ZLIB_LIBS="$(pwd)/../zlib-1.2.11_x64"
 
 ##export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
 ##export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"

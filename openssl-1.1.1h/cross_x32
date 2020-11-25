@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export ZLIB_LIBS="/../zlib-1.2.11"
+export ZLIB_LIBS="$(pwd)/../zlib-1.2.11"
 
 export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
 export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
