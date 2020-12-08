@@ -37,8 +37,8 @@ download() {
  echo "Download complite"
 }
 
-export CFLAGS="$CFLAGS -static-libgcc -static-libstdc++ -O3"
-export CPPFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -O3"
+export CFLAGS="$CFLAGS -fPIC -static-libgcc -static-libstdc++ -O3"
+export CPPFLAGS="$CPPFLAGS -fPIC -static-libgcc -static-libstdc++ -O3"
 
 export PKG_CONFIG_PATH=$(pwd)/lib/pkgconfig
 
@@ -55,7 +55,12 @@ to_make() {
  if [[ ! -f "configure" ]]; then
   ./autogen.sh
  fi
- ./configure --prefix=$pr_path --host=x86_64-w64-mingw32 --with-gnu-ld ${@:2}
+ 
+ if [[ _$host_make == _ ]]; then
+  ./configure --prefix=$pr_path --with-gnu-ld ${@:2}
+ else
+  ./configure --prefix=$pr_path --host=$host_make --with-gnu-ld ${@:2}
+ fi
 
  echo "Press enter to continue"
  read _
@@ -63,6 +68,24 @@ to_make() {
  make install
 
  cd $pr_path
+}
+
+
+to_clean() {
+ pr_path=$(pwd)
+ cd $1
+
+ make clean
+
+ cd $pr_path
+}
+
+to_clean_all() {
+ to_clean ogg-master 
+ to_clean vorbis-master 
+ to_clean opus-master  
+ to_clean flac-master 
+ to_clean libsndfile-master
 }
 
 strip_obj() {
@@ -73,18 +96,36 @@ strip_obj() {
  strip -s $(pwd)/bin/*
 }
 
+host_make=""
+
+select_host() {
+ echo "Select host:"
+ select yn in "exit" "" "i686-w64-mingw32" "x86_64-w64-mingw32" "i686-linux" "x86_64-linux"; do
+
+  if [[ _$yn == "_exit" ]]; then
+   break;
+  fi
+
+  host_make=$yn
+  break;
+ done
+}
+
 while true; do
+ echo "Host:"$host_make 
  echo "Select action:"
- select yn in "Exit" "download" "ogg_make" "vorbis_make" "opus_make" "flac_make" "sndfile_make" "strip_obj"; do
+ select yn in "Exit" "download" "select_host" "ogg_make" "vorbis_make" "opus_make" "flac_make" "sndfile_make" "strip_obj" "clean_all"; do
   case _$yn in
    _Exit          ) exit 0 ;;
    _download      ) download ;;
+   _select_host   ) select_host ;;
    _ogg_make      ) to_make ogg-master --disable-shared --enable-static ;;
    _vorbis_make   ) to_make vorbis-master --disable-shared --enable-static ;;
    _opus_make     ) to_make opus-master --disable-shared --enable-static ;; 
    _flac_make     ) to_make flac-master --disable-shared --enable-static ;;
    _sndfile_make  ) to_make libsndfile-master --enable-shared --enable-static;;
    _strip_obj     ) strip_obj ;;
+   _clean_all     ) to_clean_all ;;
   esac
   break;
  done

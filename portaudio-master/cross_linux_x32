@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
+export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
 export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
 
 export PATH="$LD_LIBRARY_PATH:$PATH"
@@ -8,7 +8,7 @@ export PATH="$LD_LIBRARY_PATH:$PATH"
 export CFLAGS="$CFLAGS -static-libgcc -static-libstdc++ -O3"
 export CPPFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -O3"
 
-./configure --prefix=$(pwd) --host=x86_64-w64-mingw32 --with-gnu-ld
+./configure --prefix=$(pwd) --host=i686-linux --with-gnu-ld
 
 echo "Press enter to continue"
 read _
@@ -20,8 +20,11 @@ chmod +x to_make.sh
 $SHELL to_make.sh
 
 echo "strip dll"
-strip -s lib/.libs/*.dll
+strip -s lib/.libs/*.so*
 
 echo "build .a"
-x86_64-w64-mingw32-ar r lib/.libs/libportaudio.a src/*/.libs/*.o src/*/*/.libs/*.o
+ar r lib/.libs/libportaudio.a src/*/.libs/*.o src/*/*/.libs/*.o
+
+
+
 
