@@ -1,0 +1,30 @@
+#!/bin/sh
+
+export LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu"
+export CFLAGS="$CFLAGS -L$LD_LIBRARY_PATH"
+
+export PATH="$LD_LIBRARY_PATH:$PATH"
+
+export CFLAGS="$CFLAGS -static-libgcc -static-libstdc++ -O3 -m32"
+export CPPFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -O3 -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+
+./configure --prefix=$(pwd) --host=i686-w64-mingw32 --with-gnu-ld
+
+echo "Press enter to continue"
+read _
+
+echo "#!/bin/sh
+make">to_make.sh
+chmod +x to_make.sh
+
+$SHELL to_make.sh
+
+echo "strip dll"
+strip -s src/libmpg123/.libs/*.dll
+
+echo "build .a"
+x86_64-w64-mingw32-ar r src/libmpg123/.libs/libmpg123.a src/libmpg123/.libs/*.o
+
+
+
