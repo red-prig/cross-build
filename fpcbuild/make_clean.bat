@@ -1,6 +1,4 @@
 
-cd freepascal-master
-
-start ..\build clean
+start build clean
 
 pause

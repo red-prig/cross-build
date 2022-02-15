@@ -4,25 +4,19 @@
     :: !!! don't forget to set YOUR path to current FPC !!!
      
     @ECHO OFF
+    cd /D "%~dp0"
 
-    rem Set INST=%~dp0\build
-    rem mkdir %INST%
+    SET CurrFP=C:\lazarus\fpc\3.2.2\bin\x86_64-win64
 
-    IF "%2"=="W32" (
-            SET CurrFP=C:\lazarus\fpc\3.2.0\bin\x86_64-win64
-    )
-    IF "%2"=="W64" (
-            SET CurrFP=C:\lazarus\fpc\3.2.0\bin\x86_64-win64
-    )
     SET OldPath=%Path%
     SET Path=%CurrFP%;%OldPath%
     SET Opts=-gl -Scghi -O3 -CX -XX -WG -l -vewnhibq -dRELEASE
 
     IF "%1"=="clean" (
-        make clean all %Opt% FPC=%CurrFP%\ppc386.exe
+        make clean
         GOTO Exit
     )
-     
+
     :: "Target" stuff works only if this option is set
     SETLOCAL ENABLEDELAYEDEXPANSION
     IF "%1"=="make" (
@@ -44,12 +38,12 @@
         rem SET /P ans=Compile the compiler? [y/n]
         rem IF "!ans!"=="y" (
             CD compiler
-            make cycle !Target! %Opt%
+            make cycle !Target! %Opt% ZIPPROG=%CD%/zip.exe
             CD ..
         rem )
         rem SET /P ans=Compile other units? [y/n]
         rem IF "!ans!"=="y" (
-            make singlezipinstall !Target! %Opt%
+            make singlezipinstall !Target! %Opt% ZIPPROG=%CD%/zip.exe
         rem )
         GOTO Exit
     )
@@ -60,5 +54,6 @@
      
     :Exit
     SET Path=%OldPath%
+    SET OldPath=
      
     PAUSE
